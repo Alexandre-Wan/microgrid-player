@@ -1,8 +1,8 @@
 # python 3
 # this class combines all basic features of a generic player
-import pandas as pd
+#import pandas as pd
 import numpy as np
-import matplotlib.pyplot as pl
+#import matplotlib.pyplot as pl
 import pulp
 
 
