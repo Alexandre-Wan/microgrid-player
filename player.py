@@ -95,7 +95,7 @@ class Player:
                 if variable.name == "battery_load" + str(t):
                     res.append(variable.varValue)
         self.res = np.array(res)
-
+"""
 A = pd.read_csv('indus_cons_scenarios.csv')
 B = A[A["site_id"]==1]
 days = []
@@ -107,3 +107,4 @@ P = Player()
 P.set_prices(100*np.random.rand(48))
 P.set_scenario(days[0])
 print(P.compute_all_load())
+"""
