@@ -40,7 +40,7 @@ class Player:
 
     def reset(self):
         self.res = []
-        pass
+        
 
     def optimize(self):
         Delta_t = 0.5
