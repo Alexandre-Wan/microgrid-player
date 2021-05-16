@@ -39,7 +39,7 @@ class Player:
         return load
 
     def reset(self):
-        self.res = []
+        self.res = np.array([])
         
 
     def optimize(self):
