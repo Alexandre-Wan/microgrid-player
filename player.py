@@ -86,7 +86,7 @@ class Player:
         my_lp_problem += variables[0]["battery_load"] >= 0, constraint_name
 
         my_lp_problem.setObjective(
-            pulp.lpSum([self.prices[t] * variables[t]["total_load"] * Delta_t for t in range(48)]))
+            pulp.lpSum([self.prices["purchase"][t] * variables[t]["total_load"] * Delta_t for t in range(48)]))
         my_lp_problem.solve()
 
         res = []
