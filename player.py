@@ -61,6 +61,9 @@ class Player:
             var_name = "battery_stock" + str(t)
             variables[t]["battery_stock"] = pulp.LpVariable(var_name, 0, 60)  # en kW
 
+            var_name = "load_plus" + str(t)
+            variables[t]["load_plus"] = pulp.LpVariable(var_name,0)
+
             constraint_name = "egalite_centrale" + str(t)
             my_lp_problem += variables[t]["total_load"] == self.data[t] + variables[t]["battery_load"], constraint_name # être sûr de la forme de data !!!!!!!
 
@@ -68,13 +71,16 @@ class Player:
             constraint_name = "lift2" + str(t)
             my_lp_problem += variables[t]["battery_load_plus"] >= variables[t]["battery_load"], constraint_name
 
+            constraint_name = "lift_load" + str(t)
+            my_lp_problem += variables[t]["load_plus"] >= variables[t]["total_load"] , constraint_name
+
             if t == 0:
                 constraint_name = "init_stock"
                 my_lp_problem += variables[t]["battery_stock"] == 0, constraint_name
             else:
                 constraint_name = "stock" + str(t)
                 my_lp_problem += variables[t]["battery_stock"] == variables[t - 1]["battery_stock"] + \
-                                 ((1. / rho) * variables[t]["battery_load"] + (rho - (1. / rho)) * \
+                                 ((1. / rho) * variables[t]["battery_load"] + (rho - (1. / rho)) *
                                   variables[t]["battery_load_plus"]) * Delta_t , constraint_name
 
 
@@ -86,7 +92,8 @@ class Player:
         my_lp_problem += variables[0]["battery_load"] >= 0, constraint_name
 
         my_lp_problem.setObjective(
-            pulp.lpSum([self.prices["purchase"][t] * variables[t]["total_load"] * Delta_t for t in range(48)]))
+            pulp.lpSum([self.prices["sell"][t] * variables[t]["total_load"]*Delta_t +
+                         (self.prices["purchase"][t]- self.prices["sell"][t])*variables[t]["load_plus"]* Delta_t for t in range(48)]))
         my_lp_problem.solve()
 
         res = []
