@@ -76,7 +76,7 @@ class Player:
 
             if t == 0:
                 constraint_name = "init_stock"
-                my_lp_problem += variables[t]["battery_stock"] == 0, constraint_name
+                my_lp_problem += variables[t]["battery_stock"] == variables[t]["battery_load"]*Delta_t , constraint_name
             else:
                 constraint_name = "stock" + str(t)
                 my_lp_problem += variables[t]["battery_stock"] == variables[t - 1]["battery_stock"] + \
